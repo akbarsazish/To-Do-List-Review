@@ -1,6 +1,7 @@
 const todosListParent = document.getElementById('todo-list');
 
 export const todoLists = JSON.parse(localStorage.getItem('todoLists')) || [];
+// eslint-disable-next-line no-use-before-define
 
 // When the checkbox is checked it add taskcomplet class and vs
 todosListParent.addEventListener('change', (event) => {
@@ -11,31 +12,6 @@ todosListParent.addEventListener('change', (event) => {
     } else {
       taskDesc.classList.remove('taskComplet');
     }
-  }
-});
-
-// Define the removeTodo function
-const removeTodo = (index) => {
-  todoLists.splice(index, 1);
-  // eslint-disable-next-line no-use-before-define
-  updateTodoIndexes();
-  // eslint-disable-next-line no-use-before-define
-  displayTodoList();
-  localStorage.setItem('todoLists', JSON.stringify(todoLists));
-};
-
-const updateTodoIndexes = () => {
-  todoLists.forEach((todo, index) => {
-    todo.index = index + 1;
-  });
-};
-
-// Attach event listener using event delegation
-todosListParent.addEventListener('click', (event) => {
-  if (event.target.classList.contains('deleteBtn')) {
-    // eslint-disable-next-line no-use-before-define
-    const index = parseInt(event.target.id.split('-', 2)[1], 10);
-    removeTodo(index);
   }
 });
 
@@ -55,6 +31,11 @@ todosListParent.addEventListener('change', (event) => {
     localStorage.setItem('todoLists', JSON.stringify(todoLists));
   }
 });
+
+// Function to update localStorage
+const updateLocalStorage = () => {
+  localStorage.setItem('todoLists', JSON.stringify(todoLists));
+};
 
 // return the html content and load on webpage
 export const displayTodoList = () => {
@@ -113,7 +94,6 @@ export const displayTodoList = () => {
             todoElement.replaceChild(newParagraph, inputElement);
             document.removeEventListener('keyup', handleKeyUp);
 
-            // eslint-disable-next-line no-use-before-define
             updateLocalStorage();
           }
         };
@@ -124,10 +104,27 @@ export const displayTodoList = () => {
   });
 };
 
-// Function to update localStorage
-const updateLocalStorage = () => {
+const updateTodoIndexes = () => {
+  todoLists.forEach((todo, index) => {
+    todo.index = index + 1;
+  });
+};
+
+// Define the removeTodo function
+const removeTodo = (index) => {
+  todoLists.splice(index, 1);
+  updateTodoIndexes();
+  displayTodoList();
   localStorage.setItem('todoLists', JSON.stringify(todoLists));
 };
+
+// Attach event listener using event delegation
+todosListParent.addEventListener('click', (event) => {
+  if (event.target.classList.contains('deleteBtn')) {
+    const index = parseInt(event.target.id.split('-', 2)[1], 10);
+    removeTodo(index);
+  }
+});
 
 // Call displayTodoList initially or wherever appropriate in your code
 displayTodoList();

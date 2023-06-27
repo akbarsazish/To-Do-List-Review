@@ -31,7 +31,7 @@ const formValidation = (todosListParent) => {
 
 // submiting the form
 form.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' || event.keyCode === 13) {
+  if (event.key === 'Enter') {
     event.preventDefault();
     formValidation(todosListParent);
     form.submit();
